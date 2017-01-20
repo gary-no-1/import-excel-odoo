@@ -30,9 +30,8 @@ Public Class StartForm
         pgCommand.CommandType = CommandType.Text
 
         pgCommand.CommandText = "update zz_pvqcdata u " &
-            "set id_product = " &
+            "set id_product_template = " &
             "(select id from product_template s where s.name = u.product_code and s.active limit 1)"
-
 
         PgCon.Open()
         Try
@@ -60,7 +59,7 @@ Public Class StartForm
             "'TRUE' as purchase_ok, 'TRUE' as active, 'TRUE' as track_all, " &
             "'product.product_category_all' as " & dq & "categ_id/id" & dq & " , " &
             "'Stockable Product' as type " &
-            " from zz_pvqcdata where id_product is null"
+            " from zz_pvqcdata where id_product_template is null"
 
         Try
             sda = New NpgsqlDataAdapter(pgCommand)
@@ -127,10 +126,20 @@ Public Class StartForm
             lblProgressInfo.Text = "New products to be imported now available in " + csv_product
             lblProgressInfo.Refresh()
         Else
+            ' no new products to be imported.
+            ' now all new products have been imported into product_template and automatically
+            '    into product_products
+            ' so update id_product with equivalent name in product_products
+
             ' there could be a chance that some names are duplicate - hence the limit 1
+            'pgCommand.CommandText = "update zz_pvqcdata u " &
+            '"set id_product = " &
+            '"(select id from product_product s where s.name_template = u.product_code and s.active limit 1)"
+
             pgCommand.CommandText = "update zz_pvqcdata u " &
             "set id_product = " &
-            "(select id from product_product s where s.name_template = u.product_code and s.active limit 1)"
+            "(select s.id from product_product s join product_template t on " &
+            "s.product_tmpl_id = t.id where t.name = u.product_code And s.active limit 1)"
 
             PgCon.Open()
             Try
@@ -144,8 +153,8 @@ Public Class StartForm
 
             lblProgressInfo.Visible = False
             lblProgressInfo.Refresh()
-            MsgBox("There are no new Products to be imported")
-            My.Application.Log.WriteEntry("Check Products - There are no new Products to be imported")
+            MsgBox("There are no New Products to be imported")
+            My.Application.Log.WriteEntry("Check Products - There are no New Products to be imported")
 
         End If
 
@@ -155,67 +164,6 @@ Public Class StartForm
 
         ' http://www.aspsnippets.com/Articles/Import-Upload-CSV-file-data-to-SQL-Server-database-in-ASPNet-using-C-and-VBNet.aspx
 
-        'Dim dt As New DataTable()
-        'dt.Columns.AddRange(New DataColumn(1) _
-        '    {New DataColumn("odoo_id", GetType(Integer)),
-        '    New DataColumn("product_code", GetType(String))})
-
-
-        'Dim csvData As String = File.ReadAllText(csv_fn_full_path)
-        'Dim firstRow As Boolean = vbTrue
-
-        'For Each row As String In csvData.Split(ControlChars.Lf)
-        '    If Not String.IsNullOrEmpty(row) Then
-        '        '  skip first row since it is header
-        '        If Not firstRow Then
-        '            dt.Rows.Add()
-        '            Dim i As Integer = 0
-        '            For Each cell As String In row.Split(","c)
-        '                dt.Rows(dt.Rows.Count - 1)(i) = cell
-        '                i += 1
-        '            Next
-        '        End If
-        '        firstRow = vbFalse
-        '    End If
-        'Next
-
-        'Dim msg As String = ""
-
-        ''Dim en As New SqlCeEngine(sqlce_conn_string)
-        'Dim sqlceConn As New SqlCeConnection(sqlce_conn_string)
-
-        'sqlceConn.Open()
-        'Using BulkCopy As SqlCeBulkCopy = New SqlCeBulkCopy(sqlceConn)
-        '    BulkCopy.DestinationTableName = "product"
-        '    Try
-        '        BulkCopy.WriteToServer(dt)
-        '    Catch ex As Exception
-        '        MsgBox(ex.ToString)
-        '    Finally
-        '        Debug.WriteLine("Source Closed")
-        '        'MsgBox("BulkCopy Over - Phase I")
-        '    End Try
-        'End Using
-
-        'sqlceConn.Close()
-
-        'MsgBox("Products imported")
-
-        'sqlceConn.Open()
-        'Dim cmd As New SqlCeCommand()
-        'cmd = sqlceConn.CreateCommand()
-        'cmd.CommandText = "update pvqcdata " _
-        '   + "set pvqcdata.id_product = product.odoo_id " _
-        '   + "from pvqcdata join product " _
-        '   + "on pvqcdata.product_code = product.product_code"
-        'Try
-        '    cmd.ExecuteNonQuery()
-
-        'Catch ex As Exception
-        '    MsgBox(ex.ToString)
-
-        'End Try
-        'sqlceConn.Close()
 
 
     End Sub
@@ -298,8 +246,8 @@ Public Class StartForm
         PgCon.Close()
 
         If no_product_id_count > 0 Then
-            MsgBox("All Products have not been imported. Please Check")
-            My.Application.Log.WriteEntry("Check Serial Nos - All Products have not been imported.")
+            MsgBox("All Products have Not been imported. Please Check")
+            My.Application.Log.WriteEntry("Check Serial Nos - All Products have Not been imported.")
             Return
         End If
 
@@ -307,7 +255,7 @@ Public Class StartForm
             "set id_serial = " &
             "(select id from stock_production_lot s " &
             " where s.name = u.gtr_no " &
-            " and s.product_id = u.id_product)"
+            " And s.product_id = u.id_product)"
 
         PgCon.Open()
         Try
@@ -440,8 +388,8 @@ Public Class StartForm
         PgCon.Close()
 
         If no_serial_id_count > 0 Then
-            MsgBox("All Serial nos have been imported.")
-            My.Application.Log.WriteEntry("Check Serial Nos - No Serial Nos are missing .")
+            MsgBox("All Serial nos have not been imported.")
+            My.Application.Log.WriteEntry("Check Serial Nos - Serial Nos are missing .")
             Return
         End If
 
@@ -578,7 +526,7 @@ Public Class StartForm
         pgCommand.CommandType = CommandType.Text
 
         pgCommand.CommandText = "select count(*) as ctr " &
-            " from zz_pvqcdata where id_product Is null"
+            " from zz_pvqcdata where id_product_template Is null"
         Dim no_product_id_count As Integer
 
         PgCon.Open()
@@ -598,19 +546,19 @@ Public Class StartForm
             Return
         End If
 
-        pgCommand.CommandText = "update zz_pvqcdata u " &
-            "set id_product = " &
-            "(select id from product_template s where s.name = u.product_code and s.active limit 1)"
+        'pgCommand.CommandText = "update zz_pvqcdata u " &
+        '    "set id_product_template = " &
+        '    "(select id from product_template s where s.name = u.product_code and s.active limit 1)"
 
-        PgCon.Open()
-        Try
-            pgCommand.ExecuteNonQuery()
+        'PgCon.Open()
+        'Try
+        '    pgCommand.ExecuteNonQuery()
 
-        Catch ex As Exception
-            MsgBox(ex.ToString)
+        'Catch ex As Exception
+        '    MsgBox(ex.ToString)
 
-        End Try
-        PgCon.Close()
+        'End Try
+        'PgCon.Close()
 
         Dim sda As NpgsqlDataAdapter
         Dim ds As DataSet
@@ -619,7 +567,7 @@ Public Class StartForm
         Dim sq As String = Chr(39)
 
         pgCommand.CommandText = "Select distinct " &
-            "'__export__.product_template_' || id_product::text as id , " &
+            "'__export__.product_template_' || id_product_template::text as id , " &
             "list_price As lst_price " &
             " from zz_pvqcdata "
 
@@ -649,6 +597,10 @@ Public Class StartForm
         lblProgressInfo.Visible = True
         lblProgressInfo.Text = "List Price Import available at " & csv_serial
         lblProgressInfo.Refresh()
+
+    End Sub
+
+    Private Sub TabPage1_Click(sender As Object, e As EventArgs)
 
     End Sub
 End Class

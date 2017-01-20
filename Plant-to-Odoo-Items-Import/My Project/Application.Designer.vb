@@ -32,7 +32,7 @@ Namespace My
         
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
         Protected Overrides Sub OnCreateMainForm()
-            Me.MainForm = Global.Plant_to_Odoo_Items_Import.StartForm
+            Me.MainForm = Global.Plant_to_Odoo_Items_Import.StartFormNew
         End Sub
     End Class
 End Namespace

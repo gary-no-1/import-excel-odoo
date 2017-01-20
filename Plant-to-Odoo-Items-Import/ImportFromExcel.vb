@@ -48,6 +48,7 @@ Public Class ImportFromExcel
                         "list_price numeric , " &
                         "id_serial integer , " &
                         "id_product integer , " &
+                        "id_product_template integer , " &
                         "lot_no varchar(20) )"
             pgCommand.ExecuteNonQuery()
 
