@@ -860,16 +860,6 @@ Public Class StartFormNew
         Dim dq As String = Chr(34)
         Dim sq As String = Chr(39)
 
-        pgCommand.CommandText = "select '' as id , '__export__.res_partner_' || id_customer::text as " & dq & "partner_id/id" & dq &
-            ",'__export__.res_partner_' || id_customer::text as " & dq & "partner_shipping_id/id" & dq &
-            ",'product.list0' as " & dq & "pricelist_id/id" & dq &
-            ",'Deliver each product when available' as " & dq & "picking_policy" & dq &
-            ",'__export__.stock_warehouse_' || id_warehouse::text as " & dq & "warehouse_id/id" & dq &
-            ",'__export__.sale_order_type_' || id_typology::text as " & dq & "type_id/id" & dq &
-            ",'On Delivery Order' as " & dq & "order_policy" & dq &
-            ",'__export__.res_partner_' || id_customer::text as " & dq & "partner_order_id/id" & dq &
-            " from zz_saleorder where id_product is not null"
-
         '", id_customer::text as " & dq & "customer/id" & dq &
         '", id_customer::text as " & dq & "contact/id" & dq &
         '",'__export__.product_product_' || id_product::text as " & dq & "order_line/product_id/id" & dq &
