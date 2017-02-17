@@ -67,6 +67,7 @@ Public Class ImportSaleOrderExcel
                         "typology varchar(100) , " &
                         "sale_tax_code varchar(100) , " &
                         "customer_name varchar(150) , " &
+                        "saleperson_name varchar(100) , " &
                         "id_customer integer , " &
                         "id_parent integer , " &
                         "id_typology integer , " &
@@ -76,7 +77,10 @@ Public Class ImportSaleOrderExcel
                         "id_journal integer , " &
                         "id_tax integer , " &
                         "id_sku integer , " &
-                        "import_seq varchar(30)" &
+                        "id_saleperson integer , " &
+                        "id_template integer , " &
+                        "import_seq varchar(30) , " &
+                        "import_reason varchar(100)" &
                         ")"
             pgCommand.ExecuteNonQuery()
 
@@ -105,6 +109,8 @@ Public Class ImportSaleOrderExcel
             q.sa_add_1 = cleanString
             cleanString = Regex.Replace(q.sa_add_2, "[^A-Za-z0-9\-/,#@ ]", "")
             q.sa_add_2 = cleanString
+            cleanString = Regex.Replace(q.sa_city, "[^A-Za-z0-9\-/,#@ ]", "")
+            q.sa_city = cleanString
         Next q
 
         MsgBox("Ready to import")
@@ -121,7 +127,7 @@ Public Class ImportSaleOrderExcel
                 sqlInsert = "Insert into zz_saleorder " &
                 "(id_unicommerce, order_code, email, mobile, sa_name, sa_add_1, sa_add_2, sa_city, " &
                 "sa_state, sa_zip, ba_state, ba_zip, item_sku, item_name, chanel_name, " &
-                "selling_price, sale_order_code, sale_journal, typology, sale_tax_code, customer_name) " &
+                "selling_price, sale_order_code, sale_journal, typology, sale_tax_code, customer_name,saleperson_name) " &
                 " values (" &
                 dq & q.id_unicommerce & dq & "," &
                 dq & q.order_code & dq & "," &
@@ -143,7 +149,8 @@ Public Class ImportSaleOrderExcel
                 dq & q.sale_journal & dq & "," &
                 dq & q.typology & dq & "," &
                 dq & q.sale_tax_code & dq & "," &
-                dq & q.customer & dq & ")"
+                dq & q.customer & dq & "," &
+                dq & q.salesperson & dq & ")"
 
                 'MsgBox(sqlInsert)
                 My.Computer.Clipboard.SetText(sqlInsert)

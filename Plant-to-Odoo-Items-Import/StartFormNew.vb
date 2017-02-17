@@ -536,8 +536,19 @@ Public Class StartFormNew
     End Sub
 
     Private Sub StartFormNew_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim FileProperties As FileVersionInfo = FileVersionInfo.GetVersionInfo(Application.ExecutablePath)
+        Me.Text = Me.Text + "  " + FileProperties.FileVersion
+
         check_init_working_folder()
         init_db_variables()
+        lblProgressInfo.Visible = False
+        If pg_conn_string = "" Then
+            btnCheckMake.Enabled = False
+            btnImportExcel.Enabled = False
+            btnCheckProduct.Enabled = False
+            'btnCheckSerialNos.Enabled = False
+            btnCr8StockVchr.Enabled = False
+        End If
 
     End Sub
 
@@ -595,12 +606,16 @@ Public Class StartFormNew
             "where s.id = u.id_warehouse "
             pgCommand.ExecuteNonQuery()
 
-            ' get product item to be sold . item_sku is available. item_sku points to product_template NOT product_product.
-            ' but all stock is based on id of product_product. view for amazon was made based on product_template - wrong.
-            ' now cannot be changed.
+            ' get product item to be sold . item_sku is available. 
+            ' in case of amazon stock , item_sku > 500000
+            ' item_sku points to product_template Not product_product.
+            ' but all stock is based on id of product_product. 
+            ' View for amazon was made based on product_template - wrong. now cannot be changed.
+            ' for item_sku < 500000 - it it pointing to product_template.
+            ' so update it by looking up product_product along with product_template
             pgCommand.CommandText = "Update zz_saleorder u " &
             "set id_product = (select s.id from product_product s join product_template t " &
-            "on s.product_tmpl_id = t.id where u.id_sku = t.id)"
+            "on s.product_tmpl_id = t.id where u.id_sku = t.id and s.active)"
             pgCommand.ExecuteNonQuery()
 
         Catch ex As Exception
@@ -649,7 +664,7 @@ Public Class StartFormNew
             ' now cannot be changed.
             pgCommand.CommandText = "Update zz_amazon u " &
             "set id_product = (select s.id from product_product s join product_template t " &
-            "on s.product_tmpl_id = t.id where u.product_sku_id = t.id)"
+            "on s.product_tmpl_id = t.id where u.product_sku_id = t.id and s.active)"
             pgCommand.ExecuteNonQuery()
 
         Catch ex As Exception
@@ -874,7 +889,9 @@ Public Class StartFormNew
             ",'__export__.sale_order_type_' || id_typology::text as " & dq & "type_id/id" & dq &
             ",'On Delivery Order' as " & dq & "order_policy" & dq &
             ",'__export__.crm_case_section_2' as " & dq & "section_id/id" & dq &
+            ", saleperson_name as " & dq & "Salesperson" & dq &
             ", order_code as " & dq & "client_order_ref" & dq &
+            ", sale_tax_code as " & dq & "Order Lines / Taxes" & dq &
             ",id_product::text as " & dq & "Order Lines / Product / Database ID" & dq &
             ",item_price as " & dq & "order_line/price_unit" & dq &
             ",'product.product_uom_unit' as " & dq & "order_line/product_uom/id" & dq &
@@ -910,6 +927,25 @@ Public Class StartFormNew
 
         lblSOprogress.Text = "Sale Order file for import is available at " & csv_so
         lblSOprogress.Refresh()
+
+    End Sub
+
+    Private Sub TabPage1_Click(sender As Object, e As EventArgs) Handles TabPage1.Click
+
+    End Sub
+
+    Private Sub btnSpecifyUser_Click(sender As Object, e As EventArgs) Handles btnSpecifyUser.Click
+        Dim MyForm As New GetUser
+        MyForm.ShowDialog()
+
+        If odoo_user_email = "" Then
+            btnImportSerialNos.Enabled = False
+            btnCr8StockVchr.Enabled = False
+        Else
+            Me.Text = Me.Text + " -- " + odoo_user_email
+            btnImportSerialNos.Enabled = True
+            btnCr8StockVchr.Enabled = True
+        End If
 
     End Sub
 End Class

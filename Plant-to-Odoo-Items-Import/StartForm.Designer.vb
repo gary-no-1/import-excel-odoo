@@ -22,6 +22,7 @@ Partial Class StartForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(StartForm))
         Me.btnImportExcel = New System.Windows.Forms.Button()
         Me.btnCheckMake = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
@@ -158,6 +159,7 @@ Partial Class StartForm
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.btnCheckMake)
         Me.Controls.Add(Me.btnImportExcel)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.Name = "StartForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

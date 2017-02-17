@@ -22,6 +22,7 @@ Partial Class ImportFromExcel
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportFromExcel))
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtExcelFileName = New System.Windows.Forms.TextBox()
         Me.btnLocateExcelFile = New System.Windows.Forms.Button()
@@ -90,18 +91,20 @@ Partial Class ImportFromExcel
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(762, 261)
+        Me.BackColor = System.Drawing.Color.MediumTurquoise
+        Me.ClientSize = New System.Drawing.Size(762, 188)
         Me.Controls.Add(Me.lblRecordsImported)
         Me.Controls.Add(Me.btnImport)
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.btnLocateExcelFile)
         Me.Controls.Add(Me.txtExcelFileName)
         Me.Controls.Add(Me.Label1)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "ImportFromExcel"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "ImportFromCSV"
+        Me.Text = "Import Products / Serial Nos From CSV File"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

@@ -22,6 +22,7 @@ Partial Class ImportSaleOrderExcel
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportSaleOrderExcel))
         Me.btnImport = New System.Windows.Forms.Button()
         Me.btnClose = New System.Windows.Forms.Button()
         Me.btnLocateExcelFile = New System.Windows.Forms.Button()
@@ -99,11 +100,12 @@ Partial Class ImportSaleOrderExcel
         Me.Controls.Add(Me.btnLocateExcelFile)
         Me.Controls.Add(Me.txtExcelFileName)
         Me.Controls.Add(Me.Label1)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "ImportSaleOrderExcel"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "ImportSaleOrderExcel"
+        Me.Text = "Import SaleOrders from CSV File"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

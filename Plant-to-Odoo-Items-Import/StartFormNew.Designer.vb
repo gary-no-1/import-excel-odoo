@@ -22,10 +22,12 @@ Partial Class StartFormNew
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(StartFormNew))
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.btnSpecifyUser = New System.Windows.Forms.Button()
         Me.btnDataSettings = New System.Windows.Forms.Button()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.btnISOsaleorder = New System.Windows.Forms.Button()
         Me.lblSOprogress = New System.Windows.Forms.Label()
         Me.btnISoClose = New System.Windows.Forms.Button()
         Me.btnImpCustomers = New System.Windows.Forms.Button()
@@ -40,7 +42,6 @@ Partial Class StartFormNew
         Me.btnCheckMake = New System.Windows.Forms.Button()
         Me.btnImportExcel = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
-        Me.btnISOsaleorder = New System.Windows.Forms.Button()
         Me.TabPage3.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -90,6 +91,15 @@ Partial Class StartFormNew
         Me.TabPage2.Size = New System.Drawing.Size(794, 321)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Import Sales Orders"
+        '
+        'btnISOsaleorder
+        '
+        Me.btnISOsaleorder.Location = New System.Drawing.Point(265, 109)
+        Me.btnISOsaleorder.Name = "btnISOsaleorder"
+        Me.btnISOsaleorder.Size = New System.Drawing.Size(163, 23)
+        Me.btnISOsaleorder.TabIndex = 29
+        Me.btnISOsaleorder.Text = "3. Check - Create Sales Orders"
+        Me.btnISOsaleorder.UseVisualStyleBackColor = True
         '
         'lblSOprogress
         '
@@ -234,25 +244,17 @@ Partial Class StartFormNew
         Me.TabControl1.Size = New System.Drawing.Size(802, 347)
         Me.TabControl1.TabIndex = 0
         '
-        'btnISOsaleorder
-        '
-        Me.btnISOsaleorder.Location = New System.Drawing.Point(265, 109)
-        Me.btnISOsaleorder.Name = "btnISOsaleorder"
-        Me.btnISOsaleorder.Size = New System.Drawing.Size(163, 23)
-        Me.btnISOsaleorder.TabIndex = 29
-        Me.btnISOsaleorder.Text = "3. Check - Create Sales Orders"
-        Me.btnISOsaleorder.UseVisualStyleBackColor = True
-        '
         'StartFormNew
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(802, 382)
+        Me.ClientSize = New System.Drawing.Size(802, 358)
         Me.Controls.Add(Me.TabControl1)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.Name = "StartFormNew"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "StartFormNew"
+        Me.Text = "Import Data from Excel to Odoo"
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage2.ResumeLayout(False)
         Me.TabPage2.PerformLayout()

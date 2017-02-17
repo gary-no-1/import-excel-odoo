@@ -39,7 +39,7 @@
     <AssemblyVersionSettings>Increment.None.None.None</AssemblyVersionSettings>
     <AssemblyFileVersionSettings>Increment.None.None.None</AssemblyFileVersionSettings>
     <AssemblyInfoVersionSettings>Increment.None.None.None</AssemblyInfoVersionSettings>
-    <AssemblyVersion>1.40</AssemblyVersion>
+    <AssemblyVersion>1.43</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
